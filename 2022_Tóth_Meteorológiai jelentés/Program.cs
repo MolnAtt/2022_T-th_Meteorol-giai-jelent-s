@@ -12,14 +12,17 @@ namespace _2022_Tóth_Meteorológiai_jelentés
         class Adat
         {
             public string telepules;
-            public DateTime dt;
-            public TimeSpan ts;
+            public DateTime dt; // valójában nincs rá szükség
+            public TimeSpan ts; // valójában nincs rá szükség
             public string ora;
             public string perc;
             public string szelirany;
             public string szelerosseg;
             public int homerseklet;
-            public static List<Adat> lista = new List<Adat>();
+            public static List<Adat> lista = new List<Adat>(); // lehetne csak simán kintre is, nem staticba.
+            
+            //lehetne csinálni konstruktort is, ami a splitből kapott tömbbel dolgozik. Ennnél messzebbre OOP-ben már nem mennék, de erre sincs igazából szükség. Az emelt érettségi arról szól, hogy a legegyszerűbb működő kódot rakjuk össze a legrövidebb idő alatt.
+        
         }
 
         static void Main(string[] args)
@@ -41,6 +44,29 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                 Adat.lista.Add(a);
             }
             Console.WriteLine(Adat.lista.Count);
+
+            Console.WriteLine("2. feladat: \nAdja meg egy település kódját! Település:");
+            string user_telepules = Console.ReadLine();
+
+            // hagyományos megoldás:
+            // keressük hátulról nézve az első rekordot, aminek a user_telepules a települése!
+
+            {
+                int i = Adat.lista.Count - 1;
+                while (0<=i && !(Adat.lista[i].telepules==user_telepules))
+                {
+                    i--;
+                }
+                if (i!=-1)
+                {
+                    Console.WriteLine($"Az utolsó mérési adat a megadott településrol {Adat.lista[i].ora}:{Adat.lista[i].perc}-kor érkezett.");
+                }
+                else
+                {
+                    Console.WriteLine("ilyen településkód nincs!");
+                }
+            }
+
 
 
         }
