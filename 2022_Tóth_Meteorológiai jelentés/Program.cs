@@ -74,6 +74,22 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                 Console.WriteLine($"{az.dt.ToString(@"HH:mm")}");
             }
 
+            // 3.feladat:  MIN-MAX
+            {
+                int legkisebb = Adat.lista.Min(a => a.homerseklet);
+                int legnagyobb = Adat.lista.Max(a => a.homerseklet);
+                Adat legkisebb_adat = Adat.lista.First(a => a.homerseklet == legkisebb);
+                Adat legnagyobb_adat = Adat.lista.First(a => a.homerseklet == legnagyobb);
+                Console.WriteLine($"A legalacsonyabb hőmérséklet: {legkisebb_adat.telepules} {legkisebb_adat.dt.ToString(@"HH:mm")} {legkisebb_adat.homerseklet} fok.\nA legmagasabb hőmérséklet: {legnagyobb_adat.telepules} {legnagyobb_adat.dt.ToString(@"HH:mm")} {legnagyobb_adat.homerseklet} fok.");
+            }
+
+            // 3.feladat: ORDERBY
+            {
+                var rendezett = Adat.lista.OrderBy(a => a.homerseklet);
+                Console.WriteLine($"A legalacsonyabb hőmérséklet: {rendezett.First().telepules} {rendezett.First().dt.ToString(@"HH:mm")} {rendezett.First().homerseklet} fok.\nA legmagasabb hőmérséklet: {rendezett.Last().telepules} {rendezett.Last().dt.ToString(@"HH:mm")} {rendezett.Last().homerseklet} fok.");
+            }
+
+
             Console.ReadKey();
         }
     }
