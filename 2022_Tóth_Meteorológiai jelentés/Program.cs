@@ -66,9 +66,15 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                     Console.WriteLine("ilyen településkód nincs!");
                 }
             }
+            // 2. feladat: linq-kel
+            {
+                Adat az = Adat.lista.Last(a => a.telepules == user_telepules);
+                Console.WriteLine($"{az.ora}:{az.perc}");
+                //  DateTime-mal
+                Console.WriteLine($"{az.dt.ToString(@"HH:mm")}");
+            }
 
-
-
+            Console.ReadKey();
         }
     }
 }
