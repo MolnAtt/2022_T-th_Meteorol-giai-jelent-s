@@ -74,6 +74,8 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                 Console.WriteLine($"{az.dt.ToString(@"HH:mm")}");
             }
 
+            Console.WriteLine("3. feladat");
+
             // 3.feladat:  MIN-MAX
             {
                 int legkisebb = Adat.lista.Min(a => a.homerseklet);
@@ -89,6 +91,16 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                 Console.WriteLine($"A legalacsonyabb hőmérséklet: {rendezett.First().telepules} {rendezett.First().dt.ToString(@"HH:mm")} {rendezett.First().homerseklet} fok.\nA legmagasabb hőmérséklet: {rendezett.Last().telepules} {rendezett.Last().dt.ToString(@"HH:mm")} {rendezett.Last().homerseklet} fok.");
             }
 
+            // 4.feladat 
+            Console.WriteLine("4.feladat");
+            foreach (Adat item in Adat.lista.Where(a => a.szelirany == "000" && a.szelerosseg == "00"))
+            {
+                Console.WriteLine($"{item.telepules} {item.dt.ToString(@"HH:mm")}");
+            }
+            if (0==Adat.lista.Where(a => a.szelirany == "000" && a.szelerosseg == "00").Count())
+            {
+                Console.WriteLine("Nem volt szélcsend a mérések idején.");
+            }
 
             Console.ReadKey();
         }
