@@ -20,14 +20,14 @@ namespace _2022_Tóth_Meteorológiai_jelentés
             public string szelerosseg;
             public int homerseklet;
             public static List<Adat> lista = new List<Adat>(); // lehetne csak simán kintre is, nem staticba.
-            
+
             //lehetne csinálni konstruktort is, ami a splitből kapott tömbbel dolgozik. Ennnél messzebbre OOP-ben már nem mennék, de erre sincs igazából szükség. Az emelt érettségi arról szól, hogy a legegyszerűbb működő kódot rakjuk össze a legrövidebb idő alatt.
-        
+
         }
 
         static void Main(string[] args)
         {
-//            List<Adat> lista = new List<Adat>();
+            //            List<Adat> lista = new List<Adat>();
             string[] sorok = File.ReadAllLines("tavirathu13.txt");
             foreach (string sor in sorok)
             {
@@ -36,10 +36,10 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                 a.telepules = sortömb[0];
                 a.ora = sortömb[1].Substring(0, 2);
                 a.perc = sortömb[1].Substring(2, 2);
-                a.dt = new DateTime(1,1,1,int.Parse(a.ora), int.Parse(a.perc), 0);
+                a.dt = new DateTime(1, 1, 1, int.Parse(a.ora), int.Parse(a.perc), 0);
                 a.ts = new TimeSpan(int.Parse(a.ora), int.Parse(a.perc), 0);
-                a.szelirany = sortömb[2].Substring(0,3);
-                a.szelerosseg = sortömb[2].Substring(3,2);
+                a.szelirany = sortömb[2].Substring(0, 3);
+                a.szelerosseg = sortömb[2].Substring(3, 2);
                 a.homerseklet = int.Parse(sortömb[3]);
                 Adat.lista.Add(a);
             }
@@ -53,11 +53,11 @@ namespace _2022_Tóth_Meteorológiai_jelentés
 
             {
                 int i = Adat.lista.Count - 1;
-                while (0<=i && !(Adat.lista[i].telepules==user_telepules))
+                while (0 <= i && !(Adat.lista[i].telepules == user_telepules))
                 {
                     i--;
                 }
-                if (i!=-1)
+                if (i != -1)
                 {
                     Console.WriteLine($"Az utolsó mérési adat a megadott településrol {Adat.lista[i].ora}:{Adat.lista[i].perc}-kor érkezett.");
                 }
@@ -66,6 +66,7 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                     Console.WriteLine("ilyen településkód nincs!");
                 }
             }
+            
             // 2. feladat: linq-kel
             {
                 Adat az = Adat.lista.Last(a => a.telepules == user_telepules);
@@ -97,7 +98,7 @@ namespace _2022_Tóth_Meteorológiai_jelentés
             {
                 Console.WriteLine($"{item.telepules} {item.dt.ToString(@"HH:mm")}");
             }
-            if (0==Adat.lista.Where(a => a.szelirany == "000" && a.szelerosseg == "00").Count())
+            if (0 == Adat.lista.Where(a => a.szelirany == "000" && a.szelerosseg == "00").Count())
             {
                 Console.WriteLine("Nem volt szélcsend a mérések idején.");
             }
@@ -107,13 +108,14 @@ namespace _2022_Tóth_Meteorológiai_jelentés
             Console.WriteLine("5. feladat");
             foreach (string telepules in Adat.lista.Select(a => a.telepules).Distinct())
             {
-                Console.Write(telepules +" ");
-                var telepules_listaja = Adat.lista.Where(a => a.telepules == telepules
-                && (int.Parse(a.ora) == 1
-                || int.Parse(a.ora) == 7
-                || int.Parse(a.ora) == 13
-                || int.Parse(a.ora) == 19));
-                if (0 == telepules_listaja.Count(x => int.Parse(x.ora) == 1) 
+                Console.Write(telepules + " ");
+                var telepules_listaja = Adat.lista
+                                                .Where(a => a.telepules == telepules
+                                                        && (int.Parse(a.ora) == 1
+                                                        || int.Parse(a.ora) == 7
+                                                        || int.Parse(a.ora) == 13
+                                                        || int.Parse(a.ora) == 19));
+                if (0 == telepules_listaja.Count(x => int.Parse(x.ora) == 1)
                     || 0 == telepules_listaja.Count(x => int.Parse(x.ora) == 7)
                     || 0 == telepules_listaja.Count(x => int.Parse(x.ora) == 13)
                     || 0 == telepules_listaja.Count(x => int.Parse(x.ora) == 19))
@@ -133,11 +135,33 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                             .Where(a => a.telepules == telepules)
                             .Min(a => a.homerseklet);
 
-                Console.Write($"; Hőmérsékletingadozás: {telepules_max-telepules_min}");
+                Console.Write($"; Hőmérsékletingadozás: {telepules_max - telepules_min}");
                 Console.WriteLine();
 
             }
 
+
+            //6. feladat
+            foreach (string telepules in Adat.lista.Select(a => a.telepules).Distinct())
+            {
+                using (StreamWriter f = new StreamWriter($"{telepules}.txt"))
+                {
+                    f.WriteLine(telepules);
+                    foreach (Adat adat in Adat.lista.Where(a => a.telepules == telepules))
+                    {
+                        f.Write(adat.dt.ToString(@"HH:mm"));
+                        f.Write(" ");
+                        for (int i = 0; i < int.Parse(adat.szelerosseg); i++)
+                        {
+                            f.Write("#");
+                        }
+                        f.WriteLine();
+                    }
+                    
+                }
+            }
+
+            Console.WriteLine("A fájlok elkészültek");
             Console.ReadKey();
         }
     }
