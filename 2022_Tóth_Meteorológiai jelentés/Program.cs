@@ -102,6 +102,42 @@ namespace _2022_Tóth_Meteorológiai_jelentés
                 Console.WriteLine("Nem volt szélcsend a mérések idején.");
             }
 
+            // 5. feladat
+            // linq!
+            Console.WriteLine("5. feladat");
+            foreach (string telepules in Adat.lista.Select(a => a.telepules).Distinct())
+            {
+                Console.Write(telepules +" ");
+                var telepules_listaja = Adat.lista.Where(a => a.telepules == telepules
+                && (int.Parse(a.ora) == 1
+                || int.Parse(a.ora) == 7
+                || int.Parse(a.ora) == 13
+                || int.Parse(a.ora) == 19));
+                if (0 == telepules_listaja.Count(x => int.Parse(x.ora) == 1) 
+                    || 0 == telepules_listaja.Count(x => int.Parse(x.ora) == 7)
+                    || 0 == telepules_listaja.Count(x => int.Parse(x.ora) == 13)
+                    || 0 == telepules_listaja.Count(x => int.Parse(x.ora) == 19))
+                {
+                    Console.Write("NA");
+                }
+                else
+                {
+                    Console.Write("középhőmérséklet: " + Math.Round((double)telepules_listaja.Sum(x => x.homerseklet) / telepules_listaja.Count()).ToString());
+                }
+
+                int telepules_max = Adat.lista
+                                            .Where(a => a.telepules == telepules)
+                                            .Max(a => a.homerseklet);
+
+                int telepules_min = Adat.lista
+                            .Where(a => a.telepules == telepules)
+                            .Min(a => a.homerseklet);
+
+                Console.Write($"; Hőmérsékletingadozás: {telepules_max-telepules_min}");
+                Console.WriteLine();
+
+            }
+
             Console.ReadKey();
         }
     }
